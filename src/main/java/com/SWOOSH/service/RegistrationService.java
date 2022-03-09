@@ -1,14 +1,21 @@
 package com.SWOOSH.service;
 
+import com.SWOOSH.model.ConfirmationCode;
 import com.SWOOSH.model.User;
+import com.SWOOSH.repository.ConfirmationCodeRepository;
 import com.SWOOSH.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class RegistrationService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ConfirmationCodeRepository confirmationCodeRepository;
 
     @Autowired
     private EmailService emailService;
@@ -21,10 +28,22 @@ public class RegistrationService {
         return userRepository.countUserByEmail(email) == 0;
     }
 
-    public String sendConfirmationCode(String email) {
-        String code = generateConfirmationCode(10);
-        emailService.sentEmail(email, generateConfirmationCode(10));
-        return code;
+    public boolean checkConfirmationCode(String email, String code) {
+        Optional<ConfirmationCode> confirmationCode = confirmationCodeRepository.getConfirmationCodeByEmail(email);
+        return confirmationCode.isPresent() && confirmationCode.get().getCode().equals(code);
+    }
+
+    public void sendAndSaveConfirmationCode(String email) {
+        ConfirmationCode code = new ConfirmationCode();
+        code.setCode(generateConfirmationCode(10));
+        code.setEmail(email);
+        if(confirmationCodeRepository.countByEmail(email)!=0) {
+            confirmationCodeRepository.updateCode(code.getEmail(), code.getCode());
+        } else {
+            confirmationCodeRepository.save(code);
+        }
+
+        emailService.sentEmail(code.getEmail(), code.getCode());
     }
 
     private String generateConfirmationCode(int codeLength) {

@@ -22,8 +22,13 @@ public class RegistrationRestController {
         return registrationService.isPresentEmail(email);
     }
 
-    @PostMapping("/getConfirmationCode")
-    public String sendConfirmationCode(String email) {
-        return registrationService.sendConfirmationCode(email);
+    @PostMapping("/sendConfirmationCode")
+    public void sendConfirmationCode(String email) {
+        registrationService.sendAndSaveConfirmationCode(email);
+    }
+
+    @PostMapping("/checkConfirmationCode")
+    public boolean checkConfirmationCode(String email, String code) {
+       return registrationService.checkConfirmationCode(email, code);
     }
 }
