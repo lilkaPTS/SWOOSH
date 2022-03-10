@@ -37,13 +37,12 @@ public class RegistrationService {
         ConfirmationCode code = new ConfirmationCode();
         code.setCode(generateConfirmationCode(10));
         code.setEmail(email);
+        emailService.sentEmail(code.getEmail(), code.getCode());
         if(confirmationCodeRepository.countByEmail(email)!=0) {
             confirmationCodeRepository.updateCode(code.getEmail(), code.getCode());
         } else {
             confirmationCodeRepository.save(code);
         }
-
-        emailService.sentEmail(code.getEmail(), code.getCode());
     }
 
     private String generateConfirmationCode(int codeLength) {
