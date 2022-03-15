@@ -7,17 +7,19 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "confirmation_codes")
+@Table(name = "car_washes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConfirmationCode {
+public class CarWash {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, name = "confirmation_code_id")
-    private int confirmationCodeId;
+    @Column(nullable = false, name = "user_id")
+    private int carWashId;
+    @Column(nullable = false)
+    private String location;
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
-    private String code;
+    private String password;
 }
