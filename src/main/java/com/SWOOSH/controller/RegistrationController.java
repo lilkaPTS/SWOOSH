@@ -3,23 +3,25 @@ package com.SWOOSH.controller;
 import com.SWOOSH.model.User;
 import com.SWOOSH.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RegistrationRestController {
+@CrossOrigin(origins = "http://localhost:4200")
+public class RegistrationController {
 
     @Autowired
     private RegistrationService registrationService;
 
     @PostMapping("/createUser")
-    public User createUser(User user) {
+    public boolean createUser(User user) {
         return registrationService.create(user);
     }
 
     @PostMapping("/emailCheck")
     public boolean isPresentEmail(String email) {
-        return registrationService.isPresentEmail(email);
+        return !registrationService.isPresentEmail(email);
     }
 
     @PostMapping("/sendConfirmationCode")

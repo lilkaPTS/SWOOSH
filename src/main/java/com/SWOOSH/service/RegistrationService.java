@@ -20,8 +20,14 @@ public class RegistrationService {
     @Autowired
     private EmailService emailService;
 
-    public User create(User user) {
-        return userRepository.save(user);
+    public boolean create(User user) {
+        if(isPresentEmail(user.getEmail())) {
+            userRepository.save(user);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean isPresentEmail(String email) {

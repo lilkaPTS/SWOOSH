@@ -10,7 +10,7 @@ public class LoginService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean singIn(String email, String password) {
+    public boolean signIn(String email, String password) {
         return userRepository.getUserByEmail(email).map(user -> user.getPassword().equals(password)).orElse(false);
     }
 }

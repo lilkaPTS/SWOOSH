@@ -17,6 +17,9 @@ public class Service {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "service_id")
     private int serviceId;
+    @ManyToOne
+    @JoinColumn(name = "car_wash_id", nullable = false)
+    private CarWash carWash;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)

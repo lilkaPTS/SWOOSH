@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "car_washes")
@@ -14,12 +15,17 @@ import javax.persistence.*;
 public class CarWash {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, name = "user_id")
+    @Column(nullable = false, name = "car_wash_id")
     private int carWashId;
+
+    @OneToMany(mappedBy = "carWash")
+    private Set<Service> services;
+
+    @OneToMany(mappedBy = "carWash")
+    private Set<Employee> employees;
+
     @Column(nullable = false)
     private String location;
-    @Column(nullable = false)
-    private String email;
-    @Column(nullable = false)
-    private String password;
+
+
 }
