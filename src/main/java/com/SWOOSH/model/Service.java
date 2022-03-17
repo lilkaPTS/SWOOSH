@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "services")
@@ -20,6 +21,8 @@ public class Service {
     @ManyToOne
     @JoinColumn(name = "car_wash_id", nullable = false)
     private CarWash carWash;
+    @ManyToMany(mappedBy = "orderedServices")
+    private Set<Order> ordered;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
