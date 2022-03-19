@@ -1,0 +1,1 @@
+INSERT INTO public.employees (employee_id, name, car_wash_id) VALUES (1, 'Иванов Иван Иванович', 1);

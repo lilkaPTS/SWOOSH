@@ -1,0 +1,2 @@
+INSERT INTO public.services (service_id, name, price, car_wash_id) VALUES (1, 'Анти дождь', 2000, 1);
+INSERT INTO public.services (service_id, name, price, car_wash_id) VALUES (2, 'Детейлинг химчистка', 13000, 1);

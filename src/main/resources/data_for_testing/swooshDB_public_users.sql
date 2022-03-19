@@ -1,0 +1,1 @@
+INSERT INTO public.users (user_id, email, name, password) VALUES (1, 'liluser@mail.ru', 'Илья', 'qwerty');

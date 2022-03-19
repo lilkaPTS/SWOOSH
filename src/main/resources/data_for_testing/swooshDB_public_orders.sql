@@ -1,0 +1,1 @@
+INSERT INTO public.orders (order_id, date, grade, total_price, car_wash_id, employee_id, user_id) VALUES (1, '2022-03-19 20:46:46.000000', null, 15000, 1, 1, 1);
