@@ -8,6 +8,8 @@ import com.SWOOSH.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +27,20 @@ public class AdminService {
         else {
             return false;
         }
+    }
+
+    public List<String> getAllEmployeesByCarWash(String location) {
+        List<String> result = new ArrayList<>();
+        Optional<CarWash> carWash = carWashRepository.getCarWashByLocation(location);
+        if(carWash.isPresent()) {
+            List<Employee> employees = employeeRepository.getEmployeesByCarWash(carWash.get());
+            employees.forEach(employee -> result.add(employee.getName()));
+        }
+        return result;
+    }
+
+    public List<String> getAllCarWashes() {
+        return carWashRepository.getAll();
     }
 
     public boolean createEmployee(String name, String carWashLocation) {

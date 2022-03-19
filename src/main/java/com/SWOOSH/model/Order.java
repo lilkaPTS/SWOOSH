@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -23,6 +24,9 @@ public class Order {
     @OneToOne
     @JoinColumn(nullable = false, name = "employee_id")
     private Employee employee;
+    @OneToOne
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
     @ManyToMany
     @JoinTable(
             name = "order_service",
@@ -31,7 +35,9 @@ public class Order {
     private Set<Service> orderedServices;
     @Column(nullable = false, name = "total_price")
     private int totalPrice;
-    @Column(nullable = false, name = "grade")
+    @Column(nullable = false, name = "date")
+    private Date date;
+    @Column(name = "grade")
     private double grade;
 
 }
