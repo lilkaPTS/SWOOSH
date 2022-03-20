@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
-    Optional<Employee> getEmployeeByNameAndCarWash(String name, CarWash carWash);
+    Optional<Employee> getEmployeeByPassportDataAndCarWash(String passportData, CarWash carWash);
     List<Employee> getEmployeesByCarWash(CarWash carWash);
 }

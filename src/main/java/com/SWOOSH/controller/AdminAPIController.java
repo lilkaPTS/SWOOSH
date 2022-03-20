@@ -4,9 +4,7 @@ package com.SWOOSH.controller;
 import com.SWOOSH.model.CarWash;
 import com.SWOOSH.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,9 +31,14 @@ public class AdminAPIController {
         return adminService.getAllEmployeesByCarWash(location);
     }
 
+    @PostMapping("/getNumberEmployeeOrders")
+    public Integer getNumberEmployeeOrders(String name, String carWashLocation, @RequestParam(required = false) String passportData) {
+        return adminService.getNumberEmployeeOrders(carWashLocation,name, passportData.isEmpty()? "" : passportData);
+    }
+
     @PostMapping("/createEmployee")
-    public boolean createEmployee(String name, String carWashLocation) {
-        return adminService.createEmployee(name, carWashLocation);
+    public boolean createEmployee(String name, String carWashLocation, String passportData) {
+        return adminService.createEmployee(name, carWashLocation, passportData);
     }
 
 }

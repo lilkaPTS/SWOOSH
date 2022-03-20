@@ -22,9 +22,12 @@ public class Employee {
     private CarWash carWash;
     @Column(nullable = false)
     private String name;
+    @Column(name = "passport_data", nullable = false)
+    private String passportData;
 
-    public Employee(CarWash carWash, String name) {
+    public Employee(CarWash carWash,  String name, String passportData) {
         this.carWash = carWash;
         this.name = name;
+        this.passportData = passportData;
     }
 }
