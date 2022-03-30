@@ -26,19 +26,19 @@ public class AdminAPIController {
         return adminService.getAllCarWashes();
     }
 
-    @PostMapping("/getAllEmployeesByCarWash")
-    public List<String> getAllEmployeesByCarWash(String location) {
-        return adminService.getAllEmployeesByCarWash(location);
-    }
+//    @PostMapping("/getAllEmployeesByCarWash")
+//    public List<String> getAllEmployeesByCarWash(String location) {
+//        return adminService.getAllEmployeesByCarWash(location);
+//    }
 
     @PostMapping("/getNumberEmployeeOrders")
     public Integer getNumberEmployeeOrders(String name, String carWashLocation, @RequestParam(required = false) String passportData) {
         return adminService.getNumberEmployeeOrders(carWashLocation,name, passportData.isEmpty()? "" : passportData);
     }
 
-    @PostMapping("/createEmployee")
-    public boolean createEmployee(String name, String carWashLocation, String passportData) {
-        return adminService.createEmployee(name, carWashLocation, passportData);
-    }
+//    @PostMapping("/createEmployee")
+//    public boolean createEmployee(String name, String carWashLocation, String passportData) {
+//        return adminService.createEmployee(name, carWashLocation, passportData);
+//    }
 
 }

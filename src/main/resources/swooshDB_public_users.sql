@@ -1,0 +1,2 @@
+INSERT INTO public.users (id, email, name, password, role, status) VALUES (1, 'admin@mail.ru', 'Admin', '$2a$12$sUzUs.5FC7MA2LiBZ/g.zu.1RIiQvzxsWGDhf2tjfPMVJ5tk1u3fi', 'ADMIN', 'ACTIVE');
+INSERT INTO public.users (id, email, name, password, role, status) VALUES (2, 'customer@mail.ru', 'Customer', '$2a$12$EKaWdQUj.1m1DFudmsimAOGLfS1f4uVL.iGTfY4ztQfjbSXQB4CcK', 'CUSTOMER', 'ACTIVE');

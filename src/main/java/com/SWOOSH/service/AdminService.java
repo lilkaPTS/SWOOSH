@@ -32,15 +32,15 @@ public class AdminService {
         }
     }
 
-    public List<String> getAllEmployeesByCarWash(String location) {
-        List<String> result = new ArrayList<>();
-        Optional<CarWash> carWash = carWashRepository.getCarWashByLocation(location);
-        if(carWash.isPresent()) {
-            List<Employee> employees = employeeRepository.getEmployeesByCarWash(carWash.get());
-            employees.forEach(employee -> result.add(employee.getName()));
-        }
-        return result;
-    }
+//    public List<String> getAllEmployeesByCarWash(String location) {
+//        List<String> result = new ArrayList<>();
+//        Optional<CarWash> carWash = carWashRepository.getCarWashByLocation(location);
+//        if(carWash.isPresent()) {
+//            List<Employee> employees = employeeRepository.getEmployeesByCarWash(carWash.get());
+//            employees.forEach(employee -> result.add(employee.getName()));
+//        }
+//        return result;
+//    }
 
     public Integer getNumberEmployeeOrders(String carWashLocation, String name, String passportData) {
         return 0;
@@ -51,17 +51,17 @@ public class AdminService {
         return carWashRepository.getAll();
     }
 
-    public boolean createEmployee(String name, String carWashLocation, String passportData) {
-        Optional<CarWash> carWash = carWashRepository.getCarWashByLocation(carWashLocation);
-        if(carWash.isPresent()) {
-            Optional<Employee> employee = employeeRepository.getEmployeeByPassportDataAndCarWash(passportData, carWash.get());
-            if(employee.isEmpty()) {
-                employeeRepository.save(new Employee(carWash.get(), name, passportData));
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean createEmployee(String name, String carWashLocation, String passportData) {
+//        Optional<CarWash> carWash = carWashRepository.getCarWashByLocation(carWashLocation);
+//        if(carWash.isPresent()) {
+//            Optional<Employee> employee = employeeRepository.getEmployeeByPassportDataAndCarWash(passportData, carWash.get());
+//            if(employee.isEmpty()) {
+//                employeeRepository.save(new Employee(carWash.get(), name, passportData));
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
 
     public boolean isPresentCarWashLocation(String location) {

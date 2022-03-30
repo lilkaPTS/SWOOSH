@@ -15,7 +15,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "review_id")
-    private int reviewId;
+    private Long reviewId;
     @OneToOne
     @JoinColumn(nullable = false, name = "car_wash_id")
     private CarWash carWash;

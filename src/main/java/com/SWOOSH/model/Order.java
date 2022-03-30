@@ -17,13 +17,13 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "order_id")
-    private int orderId;
+    private Long orderId;
     @OneToOne
     @JoinColumn(nullable = false, name = "car_wash_id")
     private CarWash carWash;
     @OneToOne
-    @JoinColumn(nullable = false, name = "employee_id")
-    private Employee employee;
+    @JoinColumn(name = "employee_id")
+    private User employee;
     @OneToOne
     @JoinColumn(nullable = false, name = "user_id")
     private User user;

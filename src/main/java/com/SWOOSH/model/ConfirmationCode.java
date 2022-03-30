@@ -12,10 +12,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConfirmationCode {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "confirmation_code_id")
-    private int confirmationCodeId;
+    private Long confirmationCodeId;
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)

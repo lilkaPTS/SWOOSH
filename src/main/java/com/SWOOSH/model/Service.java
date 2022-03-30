@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "services")
@@ -17,12 +17,12 @@ public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "service_id")
-    private int serviceId;
+    private Long serviceId;
     @ManyToOne
     @JoinColumn(name = "car_wash_id", nullable = false)
     private CarWash carWash;
     @ManyToMany(mappedBy = "orderedServices")
-    private Set<Order> ordered;
+    private List<Order> ordered;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)

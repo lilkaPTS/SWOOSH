@@ -37,6 +37,7 @@ public class AuthenticationService {
             Map<Object, Object> response = new HashMap<>();
             response.put("email", userDTO.getEmail());
             response.put("token", token);
+            response.put("role", user.getRole());
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             return new ResponseEntity<>("Invalid email/password combination", HttpStatus.FORBIDDEN);
