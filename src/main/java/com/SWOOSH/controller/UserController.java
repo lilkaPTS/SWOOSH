@@ -39,13 +39,9 @@ public class UserController {
         return conversionService.convert(user, UserFullDto.class);
     }
 
-    @PutMapping("/confirmation")
-    public UserFullDto checkConfirmationCode(
-            @RequestParam String code,
-            @RequestBody @Valid UserDto userDto
-    ) {
-
-        User user = userService.checkConfirmationCode(userDto.getEmail(), code);
+    @PutMapping("/checkConfirmation")
+    public UserFullDto checkConfirmationCode(String code, String email) {
+        User user = userService.checkConfirmationCode(email, code);
         if (user != null) {
             return conversionService.convert(user, UserFullDto.class);
         } else {
@@ -55,12 +51,16 @@ public class UserController {
                 e.printStackTrace();
             }
         }
-
         return null;
     }
 
-    @PostMapping("/createOrder")
+    @PostMapping("/sendConfirmation")
+    public void sendConfirmationCode(String email) {
+        userService.sendConfirmationCode(email);
+    }
 
+
+    @PostMapping("/createOrder")
     public OrderDto createOrder(
             @RequestParam String email,
             @RequestParam String location,

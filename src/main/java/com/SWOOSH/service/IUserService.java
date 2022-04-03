@@ -21,4 +21,6 @@ public interface IUserService extends UserDetailsService {
     User updateStatus(Long userId, Status status);
 
     User checkConfirmationCode(String email, String code);
+
+    void sendConfirmationCode(String email);
 }

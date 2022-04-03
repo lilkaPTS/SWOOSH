@@ -103,13 +103,13 @@ public class UserServiceImpl implements IUserService {
         return null;
     }
 
+    @Override
     @Transactional
     public void sendConfirmationCode(String email) {
         ConfirmationCode code = new ConfirmationCode();
         code.setCode(generateConfirmationCode(10));
         code.setEmail(email);
         emailService.sentEmail(code.getEmail(), code.getCode());
-
         if(confirmationCodeRepository.existByEmail(email)) {
             confirmationCodeRepository.updateCode(code.getEmail(), code.getCode());
         } else {
