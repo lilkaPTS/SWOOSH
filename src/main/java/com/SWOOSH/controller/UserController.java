@@ -18,6 +18,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,8 @@ public class UserController {
     private final ConversionService conversionService;
 
     @PostMapping(value = "/createUser")
-    public UserFullDto createUser(@RequestBody @Valid UserWithPasswordDto userDto) {
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    public UserFullDto createUser(@RequestBody UserWithPasswordDto userDto) {
         User user = conversionService.convert(userDto, User.class);
         user = userService.createUser(user);
         log.debug("Created user: {}", user);

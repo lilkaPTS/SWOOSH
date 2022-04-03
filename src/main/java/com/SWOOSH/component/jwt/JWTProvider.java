@@ -28,7 +28,7 @@ public class JWTProvider {
     @Value("${jwt.expiration}")
     private long validityInMilliseconds;
 
-    public JWTProvider(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
+    public JWTProvider(@Qualifier("userServiceImpl") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 

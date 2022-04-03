@@ -6,6 +6,8 @@ import com.SWOOSH.model.User;
 import com.SWOOSH.repository.UserRepository;
 import java.util.HashMap;
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
@@ -29,6 +32,7 @@ public class AuthenticationService {
 
     public ResponseEntity<?> authenticate(UserWithPasswordDto userDto) {
         try {
+            log.debug("User Inside {}", userDto);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
             User user = userRepository.findByEmail(userDto.getEmail());
             if (user == null) {
@@ -39,6 +43,7 @@ public class AuthenticationService {
             response.put("email", userDto.getEmail());
             response.put("token", token);
             response.put("role", user.getRole());
+            log.debug("User outside {}", userDto);
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             return new ResponseEntity<>("Invalid email/password combination", HttpStatus.FORBIDDEN);
