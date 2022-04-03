@@ -10,6 +10,7 @@ import com.SWOOSH.repository.UserRepository;
 import com.SWOOSH.service.IUserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.base64.Base64Encoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("userServiceImpl")
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
@@ -29,15 +31,14 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public User createUser(User user) {
-        if (!isPresentEmail(user.getEmail())) {
+        if (isPresentEmail(user.getEmail())) {
             return null;
         }
 
         user.setPassword(new BCryptPasswordEncoder(12).encode(user.getPassword()));
         user.setRole(Role.CUSTOMER);
         user.setStatus(Status.CONFIRMATION);
-
-        sendConfirmationCode(user.getEmail());
+//        sendConfirmationCode(user.getEmail());
 
         return userRepository.save(user);
     }

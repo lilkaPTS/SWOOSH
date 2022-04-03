@@ -32,7 +32,6 @@ public class AuthenticationService {
 
     public ResponseEntity<?> authenticate(UserWithPasswordDto userDto) {
         try {
-            log.debug("User Inside {}", userDto);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
             User user = userRepository.findByEmail(userDto.getEmail());
             if (user == null) {
@@ -43,7 +42,6 @@ public class AuthenticationService {
             response.put("email", userDto.getEmail());
             response.put("token", token);
             response.put("role", user.getRole());
-            log.debug("User outside {}", userDto);
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             return new ResponseEntity<>("Invalid email/password combination", HttpStatus.FORBIDDEN);

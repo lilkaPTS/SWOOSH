@@ -13,14 +13,8 @@ import com.SWOOSH.service.IUserService;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 //@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-@Slf4j
 public class UserController {
 
     private final IUserService userService;
@@ -40,11 +33,9 @@ public class UserController {
     private final ConversionService conversionService;
 
     @PostMapping(value = "/createUser")
-    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
     public UserFullDto createUser(@RequestBody UserWithPasswordDto userDto) {
         User user = conversionService.convert(userDto, User.class);
         user = userService.createUser(user);
-        log.debug("Created user: {}", user);
         return conversionService.convert(user, UserFullDto.class);
     }
 
@@ -56,7 +47,6 @@ public class UserController {
 
         User user = userService.checkConfirmationCode(userDto.getEmail(), code);
         if (user != null) {
-            log.debug("Confirmation user: {}", user);
             return conversionService.convert(user, UserFullDto.class);
         } else {
             try {
@@ -70,25 +60,25 @@ public class UserController {
     }
 
     @PostMapping("/createOrder")
+
     public OrderDto createOrder(
             @RequestParam String email,
             @RequestParam String location,
-            @RequestParam List<String> services
+            @RequestBody List<String> services
     ) {
 
         Order order = orderService.createOrder(email, location, services);
-        log.debug("Order created: {}", order);
         return conversionService.convert(order, OrderDto.class);
     }
 
     @PutMapping("/acceptOrder")
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE_PERMISSION')")
     public OrderDto acceptOrder(
             @RequestParam Long employeeId,
             @RequestBody @Valid OrderDto orderDto
     ) {
         Order order = conversionService.convert(orderDto, Order.class);
         order = orderService.acceptOrder(order, employeeId);
-        log.debug("Order accepted: {}", order);
         return conversionService.convert(order, OrderDto.class);
     }
 
@@ -100,7 +90,6 @@ public class UserController {
     ) {
         Review review = conversionService.convert(reviewDto, Review.class);
         Order order = orderService.gradeOrder(orderId, grade, review);
-        log.debug("Graded order: {}, Created review {}", order, review);
         return conversionService.convert(order, OrderDto.class);
     }
 }

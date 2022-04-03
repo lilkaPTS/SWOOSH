@@ -14,11 +14,9 @@ import com.SWOOSH.service.IOrderService;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class OrderServiceImpl implements IOrderService {
 
@@ -52,14 +50,19 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public Order acceptOrder(Order order, Long employeeId) {
         User employee = userRepository.getById(employeeId);
-        order.setEmployee(employee);
-        return orderRepository.save(order);
+        Order oldOrder = orderRepository.getById(order.getOrderId());
+        oldOrder.setEmployee(employee);
+        return orderRepository.save(oldOrder);
     }
 
     @Override
     public Order gradeOrder(Long orderId, Double grade, Review review) {
         Order order = orderRepository.getById(orderId);
         order.setGrade(grade);
+        User user = userRepository.getById(order.getUser().getId());
+        CarWash carWash = carWashRepository.getById(order.getCarWash().getCarWashId());
+        review.setUser(user);
+        review.setCarWash(carWash);
         reviewRepository.save(review);
         return orderRepository.save(order);
     }
