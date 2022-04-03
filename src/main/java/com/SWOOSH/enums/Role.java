@@ -1,9 +1,8 @@
 package com.SWOOSH.enums;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public enum Role {
     CUSTOMER(Set.of(Permission.CUSTOMER_PERMISSION)),

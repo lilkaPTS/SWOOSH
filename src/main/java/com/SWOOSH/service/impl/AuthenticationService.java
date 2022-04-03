@@ -1,9 +1,11 @@
-package com.SWOOSH.service;
+package com.SWOOSH.service.impl;
 
 import com.SWOOSH.component.jwt.JWTProvider;
-import com.SWOOSH.dto.UserDTO;
+import com.SWOOSH.dto.UserWithPasswordDto;
 import com.SWOOSH.model.User;
 import com.SWOOSH.repository.UserRepository;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,10 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class AuthenticationService {
@@ -29,13 +27,16 @@ public class AuthenticationService {
         this.jwtProvider = jwtProvider;
     }
 
-    public ResponseEntity<?> authenticate(UserDTO userDTO) {
+    public ResponseEntity<?> authenticate(UserWithPasswordDto userDto) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword()));
-            User user = userRepository.findByEmail(userDTO.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
-            String token = jwtProvider.createToken(userDTO.getEmail(), user.getRole().name());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
+            User user = userRepository.findByEmail(userDto.getEmail());
+            if (user == null) {
+                throw new UsernameNotFoundException("User doesn't exists");
+            }
+            String token = jwtProvider.createToken(userDto.getEmail(), user.getRole().name());
             Map<Object, Object> response = new HashMap<>();
-            response.put("email", userDTO.getEmail());
+            response.put("email", userDto.getEmail());
             response.put("token", token);
             response.put("role", user.getRole());
             return ResponseEntity.ok(response);

@@ -1,4 +1,4 @@
-package com.SWOOSH.service;
+package com.SWOOSH.service.impl;
 
 import com.SWOOSH.model.User;
 import com.SWOOSH.model.UserSecurity;
@@ -21,7 +21,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("User doesn't exists"));
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User doesn't exists");
+        }
         return UserSecurity.fromUser(user);
     }
 }

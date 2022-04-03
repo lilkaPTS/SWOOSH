@@ -1,4 +1,4 @@
-package com.SWOOSH.service;
+package com.SWOOSH.service.impl;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;

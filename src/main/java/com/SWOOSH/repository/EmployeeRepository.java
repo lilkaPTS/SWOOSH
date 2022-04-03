@@ -2,11 +2,10 @@ package com.SWOOSH.repository;
 
 import com.SWOOSH.model.CarWash;
 import com.SWOOSH.model.Employee;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> getEmployeesByCarWash(CarWash carWash);
 }

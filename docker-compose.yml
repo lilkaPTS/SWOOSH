@@ -1,0 +1,25 @@
+version: '2.1'
+
+services:
+  swoosh:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      POSTGRES_HOST: db
+
+  db:
+    image: postgres
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 4167004
+      POSTGRES_DB: swooshDB
+    volumes:
+      - ./create.sql:/docker-entrypoint-initdb.d/init.sql
