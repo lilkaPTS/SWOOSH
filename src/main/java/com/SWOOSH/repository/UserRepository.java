@@ -9,7 +9,9 @@ import org.springframework.data.repository.query.Param;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("FROM User u WHERE u.email = :email AND u.status = 'ACTIVE'")
-    User findByEmail(@Param("email") String email);
+    User findByEmailWithStatusActive(@Param("email") String email);
+
+    User findByEmail(String email);
 
     @Query("SELECT case when count(u)>0 then TRUE else FALSE end FROM User u "
             + "WHERE u.email = :email AND u.status = 'ACTIVE'")

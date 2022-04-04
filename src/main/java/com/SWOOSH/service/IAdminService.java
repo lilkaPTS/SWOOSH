@@ -14,9 +14,9 @@ public interface IAdminService {
 
     CarWash addEmployees(Long carWashId, List<Employee> employees);
 
-//    List<String> getAllEmployeesByCarWash(String location);
+    //List<String> getAllEmployeesByCarWash(String location);
 
-    Integer getNumberEmployeeOrders(String carWashLocation, String name, String passportData);
+    //Integer getNumberEmployeeOrders(String email, String carWashLocation);
 
     List<String> getAllCarWashes();
 

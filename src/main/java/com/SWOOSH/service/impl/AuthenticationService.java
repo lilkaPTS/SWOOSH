@@ -33,7 +33,7 @@ public class AuthenticationService {
     public ResponseEntity<?> authenticate(UserWithPasswordDto userDto) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
-            User user = userRepository.findByEmail(userDto.getEmail());
+            User user = userRepository.findByEmailWithStatusActive(userDto.getEmail());
             if (user == null) {
                 throw new UsernameNotFoundException("User doesn't exists");
             }

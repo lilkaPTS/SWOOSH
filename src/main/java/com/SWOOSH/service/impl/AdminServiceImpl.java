@@ -30,7 +30,6 @@ public class AdminServiceImpl implements IAdminService {
     private final OrderRepository orderRepository;
 
     @Override
-    @Transactional
     public CarWash createCarWash(CarWash carWash) {
         if (isPresentCarWashLocation(carWash.getLocation())) {
             return null;
@@ -60,21 +59,15 @@ public class AdminServiceImpl implements IAdminService {
         return carWashRepository.save(carWash);
     }
 
-    @Override
-    public Integer getNumberEmployeeOrders(String carWashLocation, String name, String passportData) {
-        return 0;
-    }
-
 
     @Override
-    @Transactional(readOnly = true)
     public List<String> getAllCarWashes() {
         return carWashRepository.getAllLocations();
     }
 
     @Override
     public Employee createEmployee(Long carWashId, User user) {
-        User oldUser = userRepository.findByEmail(user.getEmail());
+        User oldUser = userRepository.findByEmailWithStatusActive(user.getEmail());
         CarWash carWash = carWashRepository.getById(carWashId);
         oldUser = userService.updateRole(oldUser.getId(), Role.EMPLOYEE);
 
@@ -87,7 +80,7 @@ public class AdminServiceImpl implements IAdminService {
 
     @Override
     public User createAdmin(User user) {
-        User oldUser = userRepository.findByEmail(user.getEmail());
+        User oldUser = userRepository.findByEmailWithStatusActive(user.getEmail());
         return userService.updateRole(oldUser.getId(), Role.ADMIN);
     }
 

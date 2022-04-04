@@ -11,17 +11,14 @@ import com.SWOOSH.service.IUserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.base64.Base64Encoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service("userServiceImpl")
 @RequiredArgsConstructor
-@Slf4j
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
@@ -29,7 +26,6 @@ public class UserServiceImpl implements IUserService {
     private final EmailService emailService;
 
     @Override
-    @Transactional
     public User createUser(User user) {
         if (isPresentEmail(user.getEmail())) {
             return null;
@@ -38,31 +34,27 @@ public class UserServiceImpl implements IUserService {
         user.setPassword(new BCryptPasswordEncoder(12).encode(user.getPassword()));
         user.setRole(Role.CUSTOMER);
         user.setStatus(Status.CONFIRMATION);
-//        sendConfirmationCode(user.getEmail());
+        sendConfirmationCode(user.getEmail());
 
         return userRepository.save(user);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public User getUser(Long userId) {
         return userRepository.getById(userId);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public User getUser(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailWithStatusActive(email);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAllUsers();
     }
 
     @Override
-    @Transactional
     public User updateRole(Long userId, Role role) {
         User user = userRepository.getById(userId);
         user.setRole(role);
@@ -71,17 +63,15 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Transactional
     public User updateStatus(Long userId, Status status) {
         User user = userRepository.getById(userId);
         user.setStatus(status);
-
         return userRepository.save(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmailWithStatusActive(email);
         if (user == null) {
             throw new UsernameNotFoundException("User doesn't exists");
         }
@@ -93,7 +83,6 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public User checkConfirmationCode(String email, String code) {
         ConfirmationCode confirmationCode = confirmationCodeRepository.getConfirmationCodeByEmail(email);
         User user = userRepository.findByEmail(email);
@@ -104,17 +93,19 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Transactional
     public void sendConfirmationCode(String email) {
-        ConfirmationCode code = new ConfirmationCode();
-        code.setCode(generateConfirmationCode(10));
-        code.setEmail(email);
-        emailService.sentEmail(code.getEmail(), code.getCode());
-        if(confirmationCodeRepository.existByEmail(email)) {
-            confirmationCodeRepository.updateCode(code.getEmail(), code.getCode());
-        } else {
-            confirmationCodeRepository.save(code);
-        }
+        Thread thread = new Thread(() -> {
+            ConfirmationCode code = new ConfirmationCode();
+            code.setCode(generateConfirmationCode(10));
+            code.setEmail(email);
+            emailService.sentEmail(code.getEmail(), code.getCode());
+            if(confirmationCodeRepository.existByEmail(email)) {
+                confirmationCodeRepository.updateCode(code.getEmail(), code.getCode());
+            } else {
+                confirmationCodeRepository.save(code);
+            }
+        });
+        thread.start();
     }
 
     private String generateConfirmationCode(Integer codeLength) {

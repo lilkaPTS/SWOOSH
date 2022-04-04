@@ -29,7 +29,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public Order createOrder(String email, String location, List<String> serviceNames) {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmailWithStatusActive(email);
         CarWash carWash = carWashRepository.getCarWashByLocation(location);
         List<com.SWOOSH.model.Service> services = serviceRepository.findAllByName(serviceNames);
         Order order = new Order();
