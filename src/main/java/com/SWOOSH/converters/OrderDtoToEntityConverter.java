@@ -9,7 +9,6 @@ public class OrderDtoToEntityConverter implements Converter<OrderDto, Order> {
     @Override
     public Order convert(OrderDto source) {
         Order order = new Order();
-        order.setOrderId(source.getOrderId());
         order.setDate(source.getDate());
         order.setGrade(source.getGrade());
         order.setTotalPrice(source.getTotalPrice());

@@ -11,6 +11,9 @@ import com.SWOOSH.repository.ServiceRepository;
 import com.SWOOSH.repository.UserRepository;
 import com.SWOOSH.service.IAdminService;
 import com.SWOOSH.service.IUserService;
+
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +60,23 @@ public class AdminServiceImpl implements IAdminService {
         carWash.setEmployee(employees);
 
         return carWashRepository.save(carWash);
+    }
+
+    @Override
+    public List<String> getAllEmployeesByCarWash(String location) {
+        List<String> result = new ArrayList<>();
+        CarWash carWash = carWashRepository.getCarWashByLocation(location);
+        List<Employee> employees = employeeRepository.getEmployeesByCarWash(carWash);
+        employees.forEach(e -> result.add(e.getUser().getName()));
+        return result;
+    }
+
+    @Override
+    public Integer getNumberEmployeeOrders(String name, String carWashLocation, Date start, Date end) {
+        User user = userRepository.findByName(name);
+        Employee employee = employeeRepository.findByUser(user);
+        CarWash carWash = carWashRepository.getCarWashByLocation(carWashLocation);
+        return orderRepository.countOrders(employee, carWash, start, end);
     }
 
 

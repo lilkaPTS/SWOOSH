@@ -4,6 +4,8 @@ import com.SWOOSH.model.CarWash;
 import com.SWOOSH.model.Employee;
 import com.SWOOSH.model.Service;
 import com.SWOOSH.model.User;
+
+import java.util.Date;
 import java.util.List;
 
 public interface IAdminService {
@@ -14,9 +16,9 @@ public interface IAdminService {
 
     CarWash addEmployees(Long carWashId, List<Employee> employees);
 
-    //List<String> getAllEmployeesByCarWash(String location);
+    List<String> getAllEmployeesByCarWash(String location);
 
-    //Integer getNumberEmployeeOrders(String email, String carWashLocation);
+    Integer getNumberEmployeeOrders(String name, String carWashLocation, Date start, Date end);
 
     List<String> getAllCarWashes();
 

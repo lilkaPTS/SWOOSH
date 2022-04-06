@@ -10,12 +10,16 @@ import com.SWOOSH.model.CarWash;
 import com.SWOOSH.model.Employee;
 import com.SWOOSH.model.Service;
 import com.SWOOSH.model.User;
+import com.SWOOSH.repository.OrderRepository;
 import com.SWOOSH.service.IAdminService;
+
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +31,7 @@ public class AdminController {
 
     private final IAdminService adminService;
     private final ConversionService conversionService;
+    private final OrderRepository orderRepository;
 
     @PostMapping("/createCarWash")
     //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
@@ -78,4 +83,19 @@ public class AdminController {
         return adminService.getAllCarWashes();
     }
 
+    @GetMapping("/getAllEmployees")
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    public List<String> getAllEmployees(String location) {
+        return adminService.getAllEmployeesByCarWash(location);
+    }
+
+    @GetMapping("/getNumberEmployeeOrders")
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    public Integer getNumberEmployeeOrders(String employeeName,
+                                           String carWashLocation,
+                                           @DateTimeFormat(pattern = "dd-MM-yyyy") Date start,
+                                           @DateTimeFormat(pattern = "dd-MM-yyyy") Date end
+    ) {
+        return adminService.getNumberEmployeeOrders(employeeName, carWashLocation, start, end);
+    }
 }
