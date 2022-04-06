@@ -23,14 +23,14 @@ public class CustomerController {
     private final ConversionService conversionService;
 
     @PostMapping("/createOrder")
-    @PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
+    //@PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
     public OrderDto createOrder(@RequestParam String email, @RequestParam String location, @RequestBody List<String> services) {
         Order order = orderService.createOrder(email, location, services);
         return conversionService.convert(order, OrderDto.class);
     }
 
     @PutMapping("/gradeOrder")
-    @PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
+    //@PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
     public OrderDto gradeOrder(@RequestParam Double grade, @RequestParam Long orderId, @RequestBody @Valid ReviewDto reviewDto) {
         Review review = conversionService.convert(reviewDto, Review.class);
         Order order = orderService.gradeOrder(orderId, grade, review);

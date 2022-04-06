@@ -10,7 +10,7 @@ public interface IAdminService {
 
     CarWash createCarWash(CarWash carWash);
 
-    CarWash addServices(Long carWashId, List<Service> services);
+    CarWash addServices(String carWashLocation, List<Service> services);
 
     CarWash addEmployees(Long carWashId, List<Employee> employees);
 
@@ -20,7 +20,7 @@ public interface IAdminService {
 
     List<String> getAllCarWashes();
 
-    Employee createEmployee(Long carWashId, User user);
+    Employee createEmployee(String carWashLocation, User user);
 
     User createAdmin(User user);
 }

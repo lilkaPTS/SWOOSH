@@ -45,6 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/api/auth/login").permitAll()
                 .antMatchers("/api/reg/*").permitAll()
+//                .antMatchers("/api/admin/*").permitAll()
+//                .antMatchers("/api/customer/*").permitAll()
+//                .antMatchers("/api/employee/*").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -53,9 +56,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     //swagger-setting
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web.ignoring().antMatchers("/**");
-//    }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/**");
+    }
 
 }

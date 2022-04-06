@@ -38,8 +38,8 @@ public class AdminServiceImpl implements IAdminService {
     }
 
     @Override
-    public CarWash addServices(Long carWashId, List<com.SWOOSH.model.Service> services) {
-        CarWash carWash = carWashRepository.getById(carWashId);
+    public CarWash addServices(String carWashLocation, List<com.SWOOSH.model.Service> services) {
+        CarWash carWash = carWashRepository.getCarWashByLocation(carWashLocation);
         carWash.setServices(services);
 
         // is it necessary to do this, since there are @ManyToOne?
@@ -66,9 +66,9 @@ public class AdminServiceImpl implements IAdminService {
     }
 
     @Override
-    public Employee createEmployee(Long carWashId, User user) {
+    public Employee createEmployee(String carWashLocation, User user) {
         User oldUser = userRepository.findByEmailWithStatusActive(user.getEmail());
-        CarWash carWash = carWashRepository.getById(carWashId);
+        CarWash carWash = carWashRepository.getCarWashByLocation(carWashLocation);
         oldUser = userService.updateRole(oldUser.getId(), Role.EMPLOYEE);
 
         Employee employee = new Employee();

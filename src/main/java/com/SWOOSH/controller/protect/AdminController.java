@@ -29,7 +29,7 @@ public class AdminController {
     private final ConversionService conversionService;
 
     @PostMapping("/createCarWash")
-    @PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
     public CarWashDto createCarWash(@RequestBody @Valid CarWashDto carWashDto) {
         CarWash carWash = conversionService.convert(carWashDto, CarWash.class);
         carWash = adminService.createCarWash(carWash);
@@ -37,15 +37,15 @@ public class AdminController {
     }
 
     @PostMapping("/createEmployee")
-    @PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
-    public EmployeeDto createEmployee(@RequestParam Long carWashId, @RequestBody @Valid UserDto userDto) {
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    public EmployeeDto createEmployee(@RequestParam String carWashLocation, @RequestBody @Valid UserDto userDto) {
         User user = conversionService.convert(userDto, User.class);
-        Employee employee = adminService.createEmployee(carWashId, user);
+        Employee employee = adminService.createEmployee(carWashLocation, user);
         return conversionService.convert(employee, EmployeeDto.class);
     }
 
     @PostMapping("/createAdmin")
-    @PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
     public UserFullDto createAdmin(@RequestBody @Valid UserDto userDto) {
         User user = conversionService.convert(userDto, User.class);
         user = adminService.createAdmin(user);
@@ -53,17 +53,17 @@ public class AdminController {
     }
 
     @PostMapping("/addServices")
-    @PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
-    public CarWashDto addServices(@RequestParam Long carWashId, @RequestBody List<ServiceDto> servicesDto) {
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    public CarWashDto addServices(@RequestParam String carWashLocation, @RequestBody List<ServiceDto> servicesDto) {
         List<Service> services = servicesDto.stream()
                 .map(e -> conversionService.convert(e, Service.class))
                 .collect(Collectors.toList());
-        CarWash carWash = adminService.addServices(carWashId, services);
+        CarWash carWash = adminService.addServices(carWashLocation, services);
         return conversionService.convert(carWash, CarWashDto.class);
     }
 
     @PostMapping("/addEmployees")
-    @PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
     public CarWashDto addEmployees(@RequestParam Long carWashId, List<EmployeeDto> employeesDto) {
         List<Employee> employees = employeesDto.stream()
                 .map(e -> conversionService.convert(e, Employee.class))
@@ -73,7 +73,7 @@ public class AdminController {
     }
 
     @GetMapping("/getAllCarWashes")
-    @PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
     public List<String> getAllCarWashes() {
         return adminService.getAllCarWashes();
     }

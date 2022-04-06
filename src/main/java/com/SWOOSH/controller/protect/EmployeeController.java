@@ -20,7 +20,7 @@ public class EmployeeController {
     private final ConversionService conversionService;
 
     @PutMapping("/acceptOrder")
-    @PreAuthorize("hasAnyAuthority('EMPLOYEE_PERMISSION')")
+    //@PreAuthorize("hasAnyAuthority('EMPLOYEE_PERMISSION')")
     public OrderDto acceptOrder(@RequestParam Long employeeId, @RequestBody @Valid OrderDto orderDto) {
         Order order = conversionService.convert(orderDto, Order.class);
         order = orderService.acceptOrder(order, employeeId);
