@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceDto {
-
-    private Long serviceId;
-    private String name;
-    private Integer price;
+public class CreateOrderDTO {
+    private String email;
+    private String location ;
+    private List<String> services;
 }

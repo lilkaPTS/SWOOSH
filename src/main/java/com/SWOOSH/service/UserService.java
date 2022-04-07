@@ -1,5 +1,6 @@
-package com.SWOOSH.service.impl;
+package com.SWOOSH.service;
 
+import com.SWOOSH.dto.RegistrationDTO;
 import com.SWOOSH.enums.Role;
 import com.SWOOSH.enums.Status;
 import com.SWOOSH.model.ConfirmationCode;
@@ -7,69 +8,38 @@ import com.SWOOSH.model.User;
 import com.SWOOSH.model.UserSecurity;
 import com.SWOOSH.repository.ConfirmationCodeRepository;
 import com.SWOOSH.repository.UserRepository;
-import com.SWOOSH.service.IUserService;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service("userServiceImpl")
 @RequiredArgsConstructor
-public class UserServiceImpl implements IUserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final ConfirmationCodeRepository confirmationCodeRepository;
     private final EmailService emailService;
 
-    @Override
-    public User createUser(User user) {
-        if (isPresentEmail(user.getEmail())) {
-            return null;
+    public Boolean createUser(RegistrationDTO registrationDTO) {
+        if (isPresentEmail(registrationDTO.getEmail())) {
+            return false;
         }
-
-        user.setPassword(new BCryptPasswordEncoder(12).encode(user.getPassword()));
+        User user = new User();
+        user.setEmail(registrationDTO.getEmail());
+        user.setName(registrationDTO.getName());
+        user.setPassword(new BCryptPasswordEncoder(12).encode(registrationDTO.getPassword()));
         user.setRole(Role.CUSTOMER);
         user.setStatus(Status.CONFIRMATION);
-        sendConfirmationCode(user.getEmail());
-
-        return userRepository.save(user);
+        sendConfirmationCode(registrationDTO.getEmail());
+        userRepository.save(user);
+        return true;
     }
 
-    @Override
-    public User getUser(Long userId) {
-        return userRepository.getById(userId);
-    }
-
-    @Override
-    public User getUser(String email) {
-        return userRepository.findByEmailWithStatusActive(email);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAllUsers();
-    }
-
-    @Override
-    public User updateRole(Long userId, Role role) {
-        User user = userRepository.getById(userId);
-        user.setRole(role);
-
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User updateStatus(Long userId, Status status) {
-        User user = userRepository.getById(userId);
-        user.setStatus(status);
-        return userRepository.save(user);
-    }
-
-    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmailWithStatusActive(email);
         if (user == null) {
@@ -78,21 +48,26 @@ public class UserServiceImpl implements IUserService {
         return UserSecurity.fromUser(user);
     }
 
+    public User updateStatus(Long userId, Status status) {
+        User user = userRepository.getById(userId);
+        user.setStatus(status);
+        return userRepository.save(user);
+    }
+
     public Boolean isPresentEmail(String email) {
         return userRepository.existUserByEmail(email);
     }
 
-    @Override
-    public User checkConfirmationCode(String email, String code) {
+    public Boolean checkConfirmationCode(String email, String code) {
         ConfirmationCode confirmationCode = confirmationCodeRepository.getConfirmationCodeByEmail(email);
         User user = userRepository.findByEmail(email);
         if (confirmationCode != null && confirmationCode.getCode().equals(code)) {
-            return updateStatus(user.getId(), Status.ACTIVE);
+            userRepository.save(updateStatus(user.getId(), Status.ACTIVE));
+            return true;
         }
-        return null;
+        return false;
     }
 
-    @Override
     public void sendConfirmationCode(String email) {
         Thread thread = new Thread(() -> {
             ConfirmationCode code = new ConfirmationCode();

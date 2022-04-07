@@ -1,7 +1,7 @@
-package com.SWOOSH.service.impl;
+package com.SWOOSH.service;
 
 import com.SWOOSH.component.jwt.JWTProvider;
-import com.SWOOSH.dto.UserWithPasswordDto;
+import com.SWOOSH.dto.LoginDTO;
 import com.SWOOSH.model.User;
 import com.SWOOSH.repository.UserRepository;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ public class AuthenticationService {
         this.jwtProvider = jwtProvider;
     }
 
-    public ResponseEntity<?> authenticate(UserWithPasswordDto userDto) {
+    public ResponseEntity<?> authenticate(LoginDTO userDto) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
             User user = userRepository.findByEmailWithStatusActive(userDto.getEmail());

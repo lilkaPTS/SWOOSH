@@ -1,13 +1,11 @@
 package com.SWOOSH.controller.protect;
 
-import com.SWOOSH.dto.OrderDto;
-import com.SWOOSH.dto.ReviewDto;
+import com.SWOOSH.dto.CreateOrderDTO;
 import com.SWOOSH.model.Order;
 import com.SWOOSH.model.Review;
-import com.SWOOSH.service.IOrderService;
+import com.SWOOSH.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,21 +17,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerController {
 
-    private final IOrderService orderService;
-    private final ConversionService conversionService;
+    private final OrderService orderService;
 
     @PostMapping("/createOrder")
     //@PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
-    public OrderDto createOrder(@RequestParam String email, @RequestParam String location, @RequestBody List<String> services) {
-        Order order = orderService.createOrder(email, location, services);
-        return conversionService.convert(order, OrderDto.class);
+    public Long createOrder(CreateOrderDTO createOrderDTO) {
+        return orderService.createOrder(createOrderDTO);
     }
 
     @PutMapping("/gradeOrder")
     //@PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
-    public OrderDto gradeOrder(@RequestParam Double grade, @RequestParam Long orderId, @RequestBody @Valid ReviewDto reviewDto) {
-        Review review = conversionService.convert(reviewDto, Review.class);
-        Order order = orderService.gradeOrder(orderId, grade, review);
-        return conversionService.convert(order, OrderDto.class);
+    public boolean gradeOrder(Long orderId, Integer grade, String text) {
+        return orderService.gradeOrder(orderId, grade, text);
     }
 }

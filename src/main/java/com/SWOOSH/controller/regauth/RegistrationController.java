@@ -1,10 +1,8 @@
 package com.SWOOSH.controller.regauth;
 
-import com.SWOOSH.dto.UserFullDto;
-import com.SWOOSH.dto.UserWithPasswordDto;
+import com.SWOOSH.dto.RegistrationDTO;
 import com.SWOOSH.model.User;
-import com.SWOOSH.service.IOrderService;
-import com.SWOOSH.service.IUserService;
+import com.SWOOSH.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
@@ -17,24 +15,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RegistrationController {
 
-    private final IUserService userService;
-    private final ConversionService conversionService;
+    private final UserService userService;
 
     @PostMapping(value = "/createUser")
-    public UserFullDto createUser(@RequestBody UserWithPasswordDto userDto) {
-        User user = conversionService.convert(userDto, User.class);
-        user = userService.createUser(user);
-        return conversionService.convert(user, UserFullDto.class);
+    public Boolean createUser(RegistrationDTO registrationDTO) {
+        return userService.createUser(registrationDTO);
     }
 
     @PutMapping("/checkConfirmation")
-    public  ResponseEntity<?> checkConfirmationCode(String code, String email) {
-        User user = userService.checkConfirmationCode(email, code);
-        if (user != null) {
-            return new ResponseEntity<>(conversionService.convert(user, UserFullDto.class), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+    public Boolean checkConfirmationCode(String code, String email) {
+        return userService.checkConfirmationCode(email, code);
     }
 
     @PostMapping("/sendConfirmation")
