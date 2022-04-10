@@ -24,7 +24,7 @@ public class CustomerController {
         return orderService.createOrder(createOrderDTO);
     }
 
-    @PutMapping("/gradeOrder")
+    @PutMapping("/createReview")
     //@PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
     public boolean gradeOrder(Long orderId, Integer grade, String text) {
         return orderService.gradeOrder(orderId, grade, text);
