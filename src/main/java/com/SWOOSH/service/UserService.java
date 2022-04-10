@@ -1,15 +1,21 @@
 package com.SWOOSH.service;
 
+import com.SWOOSH.convertors.Convertor;
 import com.SWOOSH.dto.RegistrationDTO;
+import com.SWOOSH.dto.ServiceDTO;
 import com.SWOOSH.enums.Role;
 import com.SWOOSH.enums.Status;
 import com.SWOOSH.model.ConfirmationCode;
 import com.SWOOSH.model.User;
 import com.SWOOSH.model.UserSecurity;
+import com.SWOOSH.repository.CarWashRepository;
 import com.SWOOSH.repository.ConfirmationCodeRepository;
+import com.SWOOSH.repository.ServiceRepository;
 import com.SWOOSH.repository.UserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,6 +30,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final ConfirmationCodeRepository confirmationCodeRepository;
     private final EmailService emailService;
+    private final ServiceRepository serviceRepository;
+    private final CarWashRepository carWashRepository;
 
     public Boolean createUser(RegistrationDTO registrationDTO) {
         if (isPresentEmail(registrationDTO.getEmail())) {
@@ -94,5 +102,11 @@ public class UserService implements UserDetailsService {
 
     public String getCustomerName(String email) {
         return userRepository.findByEmail(email).getName();
+    }
+
+    public List<ServiceDTO> getListOfServices(String carWashLocation) {
+        return serviceRepository.findAllByCarWash(carWashRepository.getCarWashByLocation(carWashLocation))
+                .stream()
+                .map(Convertor::serviceToServiceDTO).collect(Collectors.toList());
     }
 }

@@ -1,16 +1,12 @@
 package com.SWOOSH.controller.protect;
 
 import com.SWOOSH.dto.CreateOrderDTO;
-import com.SWOOSH.model.Order;
-import com.SWOOSH.model.Review;
-import com.SWOOSH.repository.UserRepository;
+import com.SWOOSH.dto.ServiceDTO;
 import com.SWOOSH.service.OrderService;
 import com.SWOOSH.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -35,7 +31,14 @@ public class CustomerController {
     }
 
     @GetMapping("/getName")
+    //@PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
     public String getName(String email) {
         return userService.getCustomerName(email);
+    }
+
+    @GetMapping("/getListOfServices")
+    //@PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
+    public List<ServiceDTO> getListOfServices(String carWashLocation) {
+        return userService.getListOfServices(carWashLocation);
     }
 }
