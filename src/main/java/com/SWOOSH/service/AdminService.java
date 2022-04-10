@@ -5,6 +5,7 @@ import com.SWOOSH.enums.Role;
 import com.SWOOSH.enums.Status;
 import com.SWOOSH.model.CarWash;
 import com.SWOOSH.model.Employee;
+import com.SWOOSH.model.Order;
 import com.SWOOSH.model.User;
 import com.SWOOSH.repository.CarWashRepository;
 import com.SWOOSH.repository.EmployeeRepository;
@@ -102,6 +103,8 @@ public class AdminService {
         return orderRepository.countOrders(employee, carWash, start, end);
     }
 
+
+
     public long getReturnAbility(String employeeName, String carWashLocation, Date start, Date end) {
         List<String> orders = orderRepository.getOrderForReturnAbility(
                 employeeRepository.findByUser(userRepository.findByName(employeeName)),
@@ -124,5 +127,24 @@ public class AdminService {
             }
         }
         return Math.round(100 - ((double)usernamesWithOneOrder.size()/uniqueUsernames.size())*100);
+    }
+
+    public List<UserStatsDTO> getCustomerStats(String carWashLocation) {
+        List<UserStatsDTO> result = new ArrayList<>();
+        List<Order> orders = orderRepository
+                .getOrdersByCarWash(carWashRepository.getCarWashByLocation(carWashLocation));
+        Set<User> uniqueUsers = orders.stream().map(Order::getUser).collect(Collectors.toSet());
+        uniqueUsers.forEach(user -> {
+            List<Order> userOrders = orderRepository.getOrdersByUser(user);
+            result.add(new UserStatsDTO(user.getEmail(),
+                    orderRepository.countOrderByCarWashAndUser
+                            (carWashRepository.getCarWashByLocation(carWashLocation), user),
+                    (int) Math.round(userOrders
+                            .stream()
+                            .map(Order::getTotalPrice)
+                            .reduce(Integer::sum).get()/(double)userOrders.size())
+            ));
+        });
+        return result;
     }
 }

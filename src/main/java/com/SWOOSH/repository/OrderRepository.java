@@ -19,4 +19,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query(value = "select * from orders o where o.employee_id = :employee AND o.car_wash_id = :carWash AND o.date >= :start AND o.date <= :end", nativeQuery = true)
     List<Order> getOrderForReturnAbility(@Param("employee") Employee employee, @Param("carWash") CarWash carWash, @Param("start") Date start, @Param("end") Date end);
+
+    List<Order> getOrdersByCarWash(CarWash carWash);
+
+    Integer countOrderByCarWashAndUser(CarWash carWash, User user);
+
+    List<Order> getOrdersByUser(User user);
 }

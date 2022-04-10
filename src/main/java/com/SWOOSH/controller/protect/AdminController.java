@@ -74,4 +74,10 @@ public class AdminController {
                                     @DateTimeFormat(pattern = "dd-MM-yyyy") Date end) {
         return adminService.getReturnAbility(employeeName, carWashLocation, start, end);
     }
+
+    @GetMapping("/getCustomers")
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    public List<UserStatsDTO> getCustomers(String carWashLocation) {
+        return adminService.getCustomerStats(carWashLocation);
+    }
 }
