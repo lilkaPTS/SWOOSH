@@ -2,6 +2,7 @@ package com.SWOOSH.controller.protect;
 
 
 import com.SWOOSH.dto.*;
+import com.SWOOSH.model.Order;
 import com.SWOOSH.repository.OrderRepository;
 
 import com.SWOOSH.service.AdminService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -62,5 +64,14 @@ public class AdminController {
                                            @DateTimeFormat(pattern = "dd-MM-yyyy") Date end
     ) {
         return adminService.getNumberEmployeeOrders(employeeName, carWashLocation, start, end);
+    }
+
+    @GetMapping("/getReturnAbility")
+    //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
+    public long getReturnAbility(String employeeName,
+                                    String carWashLocation,
+                                    @DateTimeFormat(pattern = "dd-MM-yyyy") Date start,
+                                    @DateTimeFormat(pattern = "dd-MM-yyyy") Date end) {
+        return adminService.getReturnAbility(employeeName, carWashLocation, start, end);
     }
 }

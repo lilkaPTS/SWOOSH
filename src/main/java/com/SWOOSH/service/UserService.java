@@ -91,4 +91,8 @@ public class UserService implements UserDetailsService {
         }
         return code.toString();
     }
+
+    public String getCustomerName(String email) {
+        return userRepository.findByEmail(email).getName();
+    }
 }

@@ -17,9 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -101,5 +100,29 @@ public class AdminService {
         Employee employee = employeeRepository.findByUser(user);
         CarWash carWash = carWashRepository.getCarWashByLocation(carWashLocation);
         return orderRepository.countOrders(employee, carWash, start, end);
+    }
+
+    public long getReturnAbility(String employeeName, String carWashLocation, Date start, Date end) {
+        List<String> orders = orderRepository.getOrderForReturnAbility(
+                employeeRepository.findByUser(userRepository.findByName(employeeName)),
+                carWashRepository.getCarWashByLocation(carWashLocation),
+                start,
+                end).stream().map(order -> order.getUser().getEmail()).collect(Collectors.toList());
+        Set<String> uniqueUsernames = new HashSet<>(orders);
+        List<String> usernamesWithOneOrder = new ArrayList<>();
+        for (String uniqueUser : uniqueUsernames) {
+            int counter = 0;
+            for (String order: orders) {
+                if(counter>1) {
+                    break;
+                } else if(order.equals(uniqueUser)) {
+                    counter++;
+                }
+            }
+            if(counter==1) {
+                usernamesWithOneOrder.add(uniqueUser);
+            }
+        }
+        return Math.round(100 - ((double)usernamesWithOneOrder.size()/uniqueUsernames.size())*100);
     }
 }
