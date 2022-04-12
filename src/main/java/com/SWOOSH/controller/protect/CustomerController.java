@@ -20,7 +20,7 @@ public class CustomerController {
 
     @PostMapping("/createOrder")
     //@PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
-    public Long createOrder(CreateOrderDTO createOrderDTO) {
+    public Long createOrder(@RequestBody CreateOrderDTO createOrderDTO) {
         return orderService.createOrder(createOrderDTO);
     }
 

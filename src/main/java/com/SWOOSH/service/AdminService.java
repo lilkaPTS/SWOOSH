@@ -23,11 +23,9 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class AdminService {
 
     private final CarWashRepository carWashRepository;
-    private final UserService userService;
     private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
     private final ServiceRepository serviceRepository;
