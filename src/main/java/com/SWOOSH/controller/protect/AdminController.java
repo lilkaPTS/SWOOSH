@@ -33,13 +33,13 @@ public class AdminController {
 
     @PostMapping("/createEmployee")
     //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
-    public void createEmployee(@RequestBody RegistrationEmployeeDTO registrationDTO) {
+    public void createEmployee(RegistrationEmployeeDTO registrationDTO) {
         adminService.createEmployee(registrationDTO);
     }
 
     @PostMapping("/addServices")
     //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
-    public void addService(@RequestBody ServiceAddDTO serviceDTO) {
+    public void addService(ServiceAddDTO serviceDTO) {
         adminService.createService(serviceDTO);
     }
 

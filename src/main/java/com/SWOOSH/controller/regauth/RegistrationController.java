@@ -18,7 +18,7 @@ public class RegistrationController {
     private final UserService userService;
 
     @PostMapping(value = "/createUser")
-    public Boolean createUser(@RequestBody RegistrationDTO registrationDTO) {
+    public Boolean createUser(RegistrationDTO registrationDTO) {
         return userService.createUser(registrationDTO);
     }
 
