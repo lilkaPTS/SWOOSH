@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/employee")
 @RequiredArgsConstructor
 public class EmployeeController {

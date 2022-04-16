@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/customer")
 @RequiredArgsConstructor
 public class CustomerController {
@@ -20,7 +20,7 @@ public class CustomerController {
 
     @PostMapping("/createOrder")
     //@PreAuthorize("hasAnyAuthority('CUSTOMER_PERMISSION')")
-    public Long createOrder(CreateOrderDTO createOrderDTO) {
+    public Long createOrder(@RequestBody CreateOrderDTO createOrderDTO) {
         return orderService.createOrder(createOrderDTO);
     }
 

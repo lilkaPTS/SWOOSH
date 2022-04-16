@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
 public class AdminController {
@@ -33,13 +33,13 @@ public class AdminController {
 
     @PostMapping("/createEmployee")
     //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
-    public void createEmployee(RegistrationEmployeeDTO registrationDTO) {
+    public void createEmployee(@RequestBody RegistrationEmployeeDTO registrationDTO) {
         adminService.createEmployee(registrationDTO);
     }
 
     @PostMapping("/addServices")
     //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
-    public void addService(ServiceAddDTO serviceDTO) {
+    public void addService(@RequestBody ServiceAddDTO serviceDTO) {
         adminService.createService(serviceDTO);
     }
 
@@ -75,9 +75,9 @@ public class AdminController {
         return adminService.getReturnAbility(employeeName, carWashLocation, start, end);
     }
 
-    @GetMapping("/getCustomers")
+    @GetMapping("/getCustomerStats")
     //@PreAuthorize("hasAnyAuthority('ADMIN_PERMISSION')")
-    public List<UserStatsDTO> getCustomers(String carWashLocation) {
+    public List<UserStatsDTO> getCustomerStats(String carWashLocation) {
         return adminService.getCustomerStats(carWashLocation);
     }
 }
